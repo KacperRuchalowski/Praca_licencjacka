@@ -1,0 +1,29 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+
+
+
+<div class="d-inline-flex mx-5 p-5 border border-dark rounded articleBackground">
+
+     {% for art in article %}
+
+         <div>
+    <h2>{{ art['Title'] }} <span class="badge badge-secondary"></span></h2>
+
+         <img src="/static/images/{{ art["Image"] }}" class="resizeImage img-thumbnail" alt="...">
+
+          <div>{{ art['Desc']|safe }}</div>
+         </div>
+
+
+
+
+    {% endfor %}
+
+</div>
+
+
+
+{% endblock %}

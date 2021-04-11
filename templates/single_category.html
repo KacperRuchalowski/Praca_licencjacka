@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+
+
+
+{% block content %}
+
+<div class="container bcontent d-inline-flex">
+
+
+        <hr />
+        <div class="card-group">
+        {% for art in article %}
+
+    <div class="card cardBorder">
+           <img src="/static/images/{{ art["Image"] }}" class=" resizeImageCard" alt="...">
+            <div class="card-body articleBackground">
+                 <h5 class="card-title">{{ art["Title"] }}</h5>
+            </div>
+            <div class="card-footer populartitleBack">
+                <a href="/article/{{ art["ID"] }}" class="btn btn-primary"> Zobacz </a>
+        {% if current_user.is_authenticated %}
+    <a href="/updatePost/{{ art["ID"] }}" class="btn btn-secondary"> Aktualizuj </a>
+    <a href="/deletePost/{{ art["ID"] }}" class="btn btn-warning"> Usuń </a>
+      {% endif %}
+            </div>
+        </div>
+
+{% endfor %}
+</div>
+</div>
+
+
+{% endblock %}
+
+

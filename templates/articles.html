@@ -1,0 +1,37 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+        {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Witaj!</h1>
+    <p class="lead">Aby przejść do konkretnego artykułu, wybierz obszar, którym jesteś zainteresowany.</p>
+  </div>
+</div>
+
+
+
+<div class="d-inline-flex mx-5 p-5 border border-dark rounded d-none d-lg-block">
+
+
+         <div>
+            <img  src="/static/map/map.jpg" alt="map" usemap="#categorymap">
+             <map name="categorymap">
+             </map>
+         </div>
+</div>
+
+
+
+
+{% endblock %}

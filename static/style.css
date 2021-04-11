@@ -1,0 +1,62 @@
+
+.removeDecor {
+    text-decoration: none;
+    color: black;
+    font-size: large;
+}
+
+.boxCenter {
+  display: flex;
+  justify-content: center;
+
+}
+
+.resizeImage {
+
+    width: 400px;
+    height: 300px;
+    float: right;
+    margin-left: 5%;
+
+}
+
+.resizeImageCard {
+     width: 400px;
+    height: 300px;
+}
+
+body{
+    background-color: #A3AF9E;
+}
+
+
+.articleBackground {
+    background-color: #D6F9DD;
+}
+
+.popularBackground {
+    background-color: #D6F9DD;
+}
+
+.populartitleBack {
+    background-color: #2A4849;
+}
+
+.navbarControl {
+    background-color: #2A4849;
+}
+
+.navbarItemDecor {
+
+    color: beige;
+    text-decoration: none;
+
+}
+
+.navbarItemDecor:hover { color: darkkhaki; }
+
+.cardBorder {
+    border-style: solid;
+    border-color: saddlebrown;
+    border-width: 3px;
+}
