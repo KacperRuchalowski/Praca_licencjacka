@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, FileField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, FileField, PasswordField, BooleanField, RadioField
 from flask_wtf.file import FileAllowed, FileRequired
 from wtforms.validators import DataRequired, Length
 from flask_ckeditor import CKEditorField
@@ -9,6 +9,7 @@ class PostForm(FlaskForm):
     title = StringField('Tytuł', validators=[DataRequired()])
     content = CKEditorField('Treść', validators=[DataRequired()])
     category = SelectField('Kategoria', coerce=int)
+    image_description = StringField('Opis zdjęcia', validators=[DataRequired()])
     image = FileField('Zdjęcie', validators=[FileAllowed(['jpg', 'png'], FileRequired())])
     submit = SubmitField('Akceptuj')
 

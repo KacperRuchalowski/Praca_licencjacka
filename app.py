@@ -43,17 +43,29 @@ class Article(db.Model):
     name = db.Column(db.String())
     description = db.Column(db.String())
     image = db.Column(db.String())
+    image_desc = db.Column(db.String())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     views = db.Column(db.Integer)
 
-    def __init__(self, name, description, image):
+    def __init__(self, name, description, image, image_desc):
         self.name = name
         self.description = description
         self.image = image
         self.views = 0
+        self.image_desc = image_desc
 
     def __repr__(self):
         return f"<article {self.name}>"
+
+
+class Quiz(db.Model):
+    __tablename__ = 'quiz'
+
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String())
+    answer1 = db.Column(db.String())
+    answer2 = db.Column(db.String())
+    good_answer = db.Column(db.String())
 
 
 @login_manager.user_loader
@@ -93,10 +105,22 @@ def GetMostPopularArticles():
             "Title": article.name,
             "Desc": article.description,
             "ID": article.id,
-            "Views": article.views
+            "Views": article.views,
+            "Image_desc": article.image_desc
 
         } for article in popular_articles]
     return results
+
+
+@app.route('/knowledge')
+def knowledge():
+    return render_template('knowledge.html', popular=GetMostPopularArticles())
+
+
+@app.route('/quiz', methods=['POST', 'GET'])
+def quiz():
+
+    return render_template('quiz.html', popular=GetMostPopularArticles())
 
 
 @app.route('/newPost', methods=['POST', 'GET'])
@@ -109,10 +133,12 @@ def newPost():
 
     if form.validate_on_submit():
         picture_file = save_picture(form.image.data)
-        article = Article(name=form.title.data, description=form.content.data, image=picture_file)
+        article = Article(name=form.title.data, description=form.content.data, image=picture_file,
+                          image_desc=form.image_description.data)
         article.category_id = form.category.data
         db.session.add(article)
         db.session.commit()
+        flash('Dodano nowy artykuł!', 'success')
         return redirect(url_for('handle_articles'))
 
     return render_template('newPost.html', title='Nowy artykuł', form=form, legend='Nowy artykuł')
@@ -133,8 +159,10 @@ def updatePost(postID):
         post.name = form.title.data
         post.description = form.content.data
         post.category_id = form.category.data
+        post.image_desc = form.image_description.data
         picture_file = save_picture(form.image.data)
         post.image = picture_file
+        flash('Zaktualizowano', 'success')
         db.session.commit()
         return redirect(url_for('handle_articles'))
 
@@ -150,6 +178,7 @@ def deletePost(postID):
     post = Article.query.get_or_404(postID)
     db.session.delete(post)
     db.session.commit()
+    flash('Usnięto artykuł', 'success')
     return redirect(url_for('handle_articles'))
 
 
@@ -158,7 +187,8 @@ def handle_articles():
     if request.method == 'POST':
         if request.is_json:
             data = request.get_json()
-            new_article = Article(name=data['name'], description=data['description'], image=data['image'])
+            new_article = Article(name=data['name'], description=data['description'], image=data['image'],
+                                  image_desc=data['image'])
             db.session.add(new_article)
             db.session.commit()
             return {"message": f"car {new_article.name} has been created successfully."}
@@ -172,7 +202,8 @@ def handle_articles():
                 "Title": article.name,
                 "Desc": article.description,
                 "ID": article.id,
-                "image": article.image
+                "image": article.image,
+                "Image_desc": article.image_desc
 
             } for article in articles]
 
@@ -190,7 +221,6 @@ def handle_articles():
 
 @app.route('/randomArticle')
 def random_article():
-
     allArticles = Article.query.all()
 
     idList = []
@@ -207,7 +237,8 @@ def random_article():
             "Title": article.name,
             "Desc": article.description,
             "Image": article.image,
-            "Views": article.views
+            "Views": article.views,
+            "Image_desc": article.image_desc
         } for article in articles]
 
     categories = Category.query.all()
@@ -219,7 +250,8 @@ def random_article():
 
     IncrementViews(randArt)
 
-    return render_template('single_article.html', article=results, popular=GetMostPopularArticles(), categories=categors)
+    return render_template('single_article.html', article=results, popular=GetMostPopularArticles(),
+                           categories=categors)
 
 
 @app.route('/categories', methods=['POST', 'GET'])
@@ -254,7 +286,8 @@ def single_article(articleID):
             "Title": article.name,
             "Desc": article.description,
             "Image": article.image,
-            "Views": article.views
+            "Views": article.views,
+            "Image_desc": article.image_desc
         } for article in articles]
 
     IncrementViews(articleID)
@@ -279,7 +312,8 @@ def single_category(categoryID):
             "Title": article.name,
             "Desc": article.description,
             "ID": article.id,
-            "Image": article.image
+            "Image": article.image,
+            "Image_desc": article.image_desc
 
         } for article in articles]
 
