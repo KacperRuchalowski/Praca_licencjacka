@@ -14,6 +14,16 @@ class PostForm(FlaskForm):
     submit = SubmitField('Akceptuj')
 
 
+class QuizForm(FlaskForm):
+    question = StringField('Pytanie', validators=[DataRequired()])
+    answer1 = StringField('Odpowiedź 1', validators=[DataRequired()])
+    answer2 = StringField('Odpowiedź 2', validators=[DataRequired()])
+    answer3 = StringField('Odpowiedź 3', validators=[DataRequired()])
+    good_answer = SelectField('Prawidłowa odpowiedź', choices=['Odpowiedź 1', 'Odpowiedź 2', 'Odpowiedź 3'])
+
+    submit = SubmitField('Akceptuj')
+
+
 class LoginForm(FlaskForm):
     username = StringField('Nazwa użytkownika', validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Hasło', validators=[DataRequired(), Length(min=2, max=20)])

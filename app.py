@@ -9,11 +9,11 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from quiz import Pytania
+
 
 from flask_ckeditor import CKEditor
 
-from forms import PostForm, LoginForm
+from forms import PostForm, LoginForm, QuizForm
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:admin@localhost:5432/yokai"
@@ -68,6 +68,12 @@ class Quiz(db.Model):
     answer2 = db.Column(db.String())
     answer3 = db.Column(db.String())
     good_answer = db.Column(db.String())
+
+    def __init__(self, question, answer1, answer2, answer3):
+        self.question = question
+        self.answer1 = answer1
+        self.answer2 = answer2
+        self.answer3 = answer3
 
 
 @login_manager.user_loader
@@ -163,6 +169,28 @@ def newPost():
         return redirect(url_for('handle_articles'))
 
     return render_template('newPost.html', title='Nowy artykuł', form=form, legend='Nowy artykuł')
+
+
+@app.route('/newQuiz', methods=['POST', 'GET'])
+def newQuiz():
+
+    form = QuizForm()
+
+    if form.validate_on_submit():
+        question = Quiz(question=form.question.data, answer1=form.answer1.data, answer2=form.answer2.data,
+                        answer3=form.answer3.data)
+        if form.good_answer.data == 'Odpowiedź 1':
+            question.good_answer = form.answer1.data
+        elif form.good_answer.data == 'Odpowiedź 2':
+            question.good_answer = form.answer2.data
+        elif form.good_answer.data == 'Odpowiedź 3':
+            question.good_answer = form.answer3.data
+        db.session.add(question)
+        db.session.commit()
+        flash('Dodano nowe pytanie!', 'success')
+        return redirect(url_for('handle_articles'))
+
+    return render_template('newQuiz.html', title='Nowy artykuł', form=form, legend='Nowy artykuł')
 
 
 @app.route('/updatePost/<int:postID>', methods=['POST', 'GET'])
