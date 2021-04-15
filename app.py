@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from quiz import Pytania
 
 from flask_ckeditor import CKEditor
 
@@ -65,6 +66,7 @@ class Quiz(db.Model):
     question = db.Column(db.String())
     answer1 = db.Column(db.String())
     answer2 = db.Column(db.String())
+    answer3 = db.Column(db.String())
     good_answer = db.Column(db.String())
 
 
@@ -120,16 +122,35 @@ def knowledge():
 @app.route('/quiz', methods=['POST', 'GET'])
 def quiz():
 
-    return render_template('quiz.html', popular=GetMostPopularArticles())
+    allQuestions = Quiz.query.all()
+
+    results = [
+        {
+            "Question": question.question,
+            "Answers": [question.answer1, question.answer2, question.answer3],
+            "GoodAnswer": question.good_answer
+
+        } for question in allQuestions]
+
+    if request.method == 'POST':
+        punkty = 0
+        odpowiedzi = request.form
+
+        for pnr, odp in odpowiedzi.items():
+            if odp == results[int(pnr)]['GoodAnswer']:
+                punkty += 1
+
+        flash('Liczba poprawnych odpowiedzi, to: {0}'.format(punkty))
+        return redirect(url_for('quiz'))
+    return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results)
 
 
 @app.route('/newPost', methods=['POST', 'GET'])
 def newPost():
-    available_groups = db.session.query(Category).all()
-    # Now forming the list of tuples for SelectField
-    groups_list = [(i.id, i.name) for i in available_groups]
+    available_posts = db.session.query(Category).all()
+    post_list = [(i.id, i.name) for i in available_posts]
     form = PostForm()
-    form.category.choices = groups_list
+    form.category.choices = post_list
 
     if form.validate_on_submit():
         picture_file = save_picture(form.image.data)
@@ -148,12 +169,12 @@ def newPost():
 def updatePost(postID):
     post = Article.query.get_or_404(postID)
 
-    available_groups = db.session.query(Category).all()
+    available_posts = db.session.query(Category).all()
     # Now forming the list of tuples for SelectField
-    groups_list = [(i.id, i.name) for i in available_groups]
+    post_list = [(i.id, i.name) for i in available_posts]
 
     form = PostForm()
-    form.category.choices = groups_list
+    form.category.choices = post_list
 
     if form.validate_on_submit():
         post.name = form.title.data

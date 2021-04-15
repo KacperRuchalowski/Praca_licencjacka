@@ -1,6 +1,30 @@
 {% extends "base_template.html" %}
 
 {% block content %}
+    <div>
+    <form method="POST">
+
+        {% for p in quiz %}
+          <p>
+
+            {{ p['Question'] }}
+            <br>
+
+            {% set pnr = loop.index0 %}
+
+            {% for o in p["Answers"] %}
+              <label>
+
+                <input type="radio" value="{{ o }}" name="{{ pnr }}">
+                {{ o }}
+              </label>
+              <br>
+            {% endfor %}
+          </p>
+        {% endfor %}
 
 
+        <button type="submit">Sprawdź odpowiedzi</button>
+    </form>
+    </div>
 {% endblock %}

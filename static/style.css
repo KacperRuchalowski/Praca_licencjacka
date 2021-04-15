@@ -26,24 +26,24 @@
 }
 
 body{
-    background-color: #A3AF9E;
+    background-color: #c7af8f;
 }
 
 
 .articleBackground {
-    background-color: #D6F9DD;
+    background-color: #edddc8;
 }
 
 .popularBackground {
-    background-color: #D6F9DD;
+    background-color: #edddc8;
 }
 
 .populartitleBack {
-    background-color: #2A4849;
+    background-color: #61471E;
 }
 
 .navbarControl {
-    background-color: #2A4849;
+    background-color: #61471E;
 }
 
 .navbarItemDecor {
@@ -53,10 +53,14 @@ body{
 
 }
 
-.navbarItemDecor:hover { color: darkkhaki; }
+.navbarItemDecor:hover { color: #DBAF67; }
 
 .cardBorder {
     border-style: solid;
     border-color: #2A4849;
     border-width: 3px;
+}
+
+.movePopular {
+    margin-left: 20px !important;
 }
