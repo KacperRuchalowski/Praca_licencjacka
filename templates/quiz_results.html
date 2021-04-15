@@ -1,0 +1,40 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+
+
+
+    <div class="form-check form-check-inline container-fluid">
+
+        <p class="questionControl questionTitle"> Ilość poprawnych odpowiedzi: {{ points }}</p>
+
+
+        {% for p in quiz %}
+          <div class="questionControl">
+
+            <p class="questionTitle">{{ p['Question'] }}</p>
+
+
+            {% for o in p["Answers"] %}
+                <ul>
+                 <li>  {{ o }}</li>
+                </ul>
+                {% endfor %}
+           {% for o in p["Answers"] %}
+                {% if o in answer %}
+                    <p class="questionFont goodAnswer"> Twoja odpowiedź: {{ o }}</p>
+                {% endif %}
+                {% if o in bad_answers %}
+                     <p class="questionFont badAnswer"> Twoja odpowiedź:  {{ o }}</p>
+                {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+
+    </div>
+
+
+
+{% endblock %}

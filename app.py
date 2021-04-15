@@ -138,15 +138,21 @@ def quiz():
         } for question in allQuestions]
 
     if request.method == 'POST':
-        punkty = 0
-        odpowiedzi = request.form
+        points = 0
+        answers = request.form
+        good_answers = []
+        bad_answers = []
 
-        for pnr, odp in odpowiedzi.items():
+        for pnr, odp in answers.items():
             if odp == results[int(pnr)]['GoodAnswer']:
-                punkty += 1
+                points += 1
+                good_answers.append(odp)
+            else:
+                bad_answers.append(odp)
 
-        flash('Liczba poprawnych odpowiedzi, to: {0}'.format(punkty))
-        return redirect(url_for('quiz'))
+        return render_template('quiz_results.html', popular=GetMostPopularArticles(), quiz=results, points=points
+                               , answer=good_answers, bad_answers=bad_answers)
+
     return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results)
 
 
