@@ -64,3 +64,20 @@ body{
 .movePopular {
     margin-left: 20px !important;
 }
+
+.questionControl {
+    margin: 5%;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10%;
+    background-color: #edddc8;
+    width: 250%;
+}
+
+.questionTitle {
+    font-size: x-large;
+}
+
+.questionFont {
+    font-size: medium;
+}

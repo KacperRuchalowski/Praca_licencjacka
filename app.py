@@ -10,7 +10,6 @@ from flask_login import LoginManager, UserMixin, login_user, current_user, logou
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-
 from flask_ckeditor import CKEditor
 
 from forms import PostForm, LoginForm, QuizForm
@@ -127,14 +126,14 @@ def knowledge():
 
 @app.route('/quiz', methods=['POST', 'GET'])
 def quiz():
-
     allQuestions = Quiz.query.all()
 
     results = [
         {
             "Question": question.question,
             "Answers": [question.answer1, question.answer2, question.answer3],
-            "GoodAnswer": question.good_answer
+            "GoodAnswer": question.good_answer,
+            "ID": question.id
 
         } for question in allQuestions]
 
@@ -173,7 +172,6 @@ def newPost():
 
 @app.route('/newQuiz', methods=['POST', 'GET'])
 def newQuiz():
-
     form = QuizForm()
 
     if form.validate_on_submit():
@@ -228,6 +226,15 @@ def deletePost(postID):
     db.session.delete(post)
     db.session.commit()
     flash('Usnięto artykuł', 'success')
+    return redirect(url_for('handle_articles'))
+
+
+@app.route('/deleteQuestion/<int:questionID>', methods=['POST', 'GET'])
+def deleteQuestion(questionID):
+    question = Quiz.query.get_or_404(questionID)
+    db.session.delete(question)
+    db.session.commit()
+    flash('Usnięto pytanie', 'success')
     return redirect(url_for('handle_articles'))
 
 

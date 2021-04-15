@@ -7,7 +7,7 @@
         <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4"> {{ legend }} </legend>
+            <h1>Nowe pytanie</h1>
                 <div class="form-group">
                     {{ form.question.label(class="form-control-label") }}
                     {% if form.question.errors %}
