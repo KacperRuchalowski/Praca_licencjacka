@@ -1,27 +1,26 @@
 import os
-import secrets
 import random
+import secrets
 
 from PIL import Image
 from flask import Flask, render_template, redirect, url_for, flash
 from flask import request
 from flask_bcrypt import Bcrypt
+from flask_ckeditor import CKEditor
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from flask_ckeditor import CKEditor
-
 from forms import PostForm, LoginForm, QuizForm
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:admin@localhost:5432/yokai"
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 ckeditor = CKEditor(app)
 login_manager = LoginManager(app)
 migrate = Migrate(app, db)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:admin@localhost:5432/yokai"
 app.config['SECRET_KEY'] = '09412da809127wdawwar'
 
 
@@ -87,6 +86,17 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), unique=True, nullable=False)
 
 
+def GetAllCategories():
+    categories = Category.query.all()
+    resultsCategory = [
+        {
+            "Title": category.name,
+            "ID": category.id
+
+        } for category in categories]
+    return resultsCategory
+
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -121,7 +131,7 @@ def GetMostPopularArticles():
 
 @app.route('/knowledge')
 def knowledge():
-    return render_template('knowledge.html', popular=GetMostPopularArticles())
+    return render_template('knowledge.html', popular=GetMostPopularArticles(), categories=GetAllCategories())
 
 
 @app.route('/quiz', methods=['POST', 'GET'])
@@ -151,9 +161,34 @@ def quiz():
                 bad_answers.append(odp)
 
         return render_template('quiz_results.html', popular=GetMostPopularArticles(), quiz=results, points=points
-                               , answer=good_answers, bad_answers=bad_answers)
+                               , answer=good_answers, bad_answers=bad_answers, categories=GetAllCategories())
 
-    return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results)
+    return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results, categories=GetAllCategories())
+
+
+@app.route('/search')
+def search():
+    q = request.args.get('q')
+
+    if q:
+        articles = Article.query.filter(Article.title.contains(q) |
+                                        Article.description.contains(q))
+        return render_template('searched_articles.html', articles=articles)
+
+    return render_template('searched_articles.html')
+
+
+@app.route('/allArticles')
+def allArticles():
+    q = request.args.get('q')
+
+    if q:
+        articles = Article.query.filter(Article.name.contains(q) |
+                                        Article.description.contains(q))
+    else:
+        articles = Article.query.all()
+    return render_template('all_articles.html', articles=articles, popular=GetMostPopularArticles(),
+                           categories=GetAllCategories())
 
 
 @app.route('/newPost', methods=['POST', 'GET'])
@@ -226,12 +261,12 @@ def updatePost(postID):
     return render_template('newPost.html', title='Aktualizuj artykuł', form=form, legend='Aktualizuj artykuł')
 
 
-@app.route('/deletePost/<int:postID>', methods=['POST', 'GET'])
+@app.route('/deletePost/<int:postID>', methods=['POST'])
 def deletePost(postID):
     post = Article.query.get_or_404(postID)
     db.session.delete(post)
     db.session.commit()
-    flash('Usnięto artykuł', 'success')
+    flash('Usunięto artykuł', 'success')
     return redirect(url_for('handle_articles'))
 
 
@@ -240,7 +275,7 @@ def deleteQuestion(questionID):
     question = Quiz.query.get_or_404(questionID)
     db.session.delete(question)
     db.session.commit()
-    flash('Usnięto pytanie', 'success')
+    flash('Usunięto pytanie', 'success')
     return redirect(url_for('handle_articles'))
 
 
@@ -269,15 +304,7 @@ def handle_articles():
 
             } for article in articles]
 
-        categories = Category.query.all()
-        resultsCategory = [
-            {
-                "Title": category.name,
-                "ID": category.id
-
-            } for category in categories]
-
-        return render_template('articles.html', articles=results, categories=resultsCategory,
+        return render_template('articles.html', articles=results, categories=GetAllCategories(),
                                popular=GetMostPopularArticles(), title="Strona główna")
 
 
@@ -303,17 +330,10 @@ def random_article():
             "Image_desc": article.image_desc
         } for article in articles]
 
-    categories = Category.query.all()
-    categors = [
-        {
-            "Title": category.name,
-            "ID": category.id,
-        } for category in categories]
-
     IncrementViews(randArt)
 
     return render_template('single_article.html', article=results, popular=GetMostPopularArticles(),
-                           categories=categors)
+                           categories=GetAllCategories())
 
 
 @app.route('/categories', methods=['POST', 'GET'])
@@ -329,14 +349,8 @@ def handle_categories():
             return {"error": "The request payload is not in JSON format"}
 
     elif request.method == 'GET':
-        categories = Category.query.all()
-        results = [
-            {
-                "Title": category.name,
-                "ID": category.id,
-            } for category in categories]
 
-        return render_template('base_template.html', result=results)
+        return render_template('base_template.html', result=GetAllCategories())
 
 
 @app.route('/article/<articleID>')
@@ -354,34 +368,18 @@ def single_article(articleID):
 
     IncrementViews(articleID)
 
-    categories = Category.query.all()
-    results = [
-        {
-            "Title": category.name,
-            "ID": category.id,
-        } for category in categories]
-
     popular = GetMostPopularArticles()
 
-    return render_template('single_article.html', article=singleArticle, categories=results, popular=popular)
+    return render_template('single_article.html', article=singleArticle, categories=GetAllCategories(), popular=popular)
 
 
 @app.route('/category/<categoryID>')
 def single_category(categoryID):
     page = request.args.get('page', 1, type=int)
     articles = Article.query.filter(Article.category_id == categoryID).paginate(page=page, per_page=3)
-
-    categories = Category.query.all()
-
     current_category = categoryID
 
-    results = [
-        {
-            "Title": category.name,
-            "ID": category.id,
-        } for category in categories]
-
-    return render_template('single_category.html', article=articles, categories=results,
+    return render_template('single_category.html', article=articles, categories=GetAllCategories(),
                            current_category=current_category,
                            popular=GetMostPopularArticles())
 
@@ -400,7 +398,7 @@ def login():
         else:
             flash('Podano złe dane. Proszę sprawdź czy wpisano poprawne hasło i login', 'danger')
             return redirect(url_for('handle_articles'))
-    return render_template('login.html', title='Logowanie', form=form)
+    return render_template('login.html', title='Logowanie', form=form, categories=GetAllCategories())
 
 
 @app.route('/logout')

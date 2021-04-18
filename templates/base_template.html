@@ -19,6 +19,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+      <li class="nav-item">
+    <a class="nav-link active navbarItemDecor" href="/allArticles"> Artykuły </a>
+        </li>
+
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle navbarItemDecor" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Kategorie
@@ -44,6 +48,7 @@
         </li>
  </ul>
     <ul class="navbar nav">
+
       <li class="nav-item">
           {% if current_user.is_authenticated %}
     <a class="nav-link active navbarItemDecor" href="/newPost"> Nowy artykuł </a>

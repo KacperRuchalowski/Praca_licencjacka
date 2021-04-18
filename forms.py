@@ -30,3 +30,7 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Zapamiętaj mnie')
     submit = SubmitField('Zaloguj się')
 
+
+class SearchForm(FlaskForm):
+    searchContent = StringField('Wyszukiwarka', validators=[Length(min=2, max=20)])
+    submit = SubmitField('Szukaj')

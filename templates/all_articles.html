@@ -1,0 +1,86 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+
+
+
+
+
+
+<div class="list-group w-75">
+
+<div>
+<form class=" my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" name="q" placeholder="Szukaj w nazwie lub treści" aria-label="Search">
+      <button class="btn popularBackground" type="submit"> Szukaj </button>
+    </form>
+</div>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nazwa</th>
+      <th scope="col">Kategoria</th>
+      <th scope="col">  </th>
+        {% if current_user.is_authenticated %}
+      <th scope="col">  </th>
+      <th scope="col">  </th>
+        {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for article in articles %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td> {{ article.name }}</td>
+    {% if article.category_id == 1 %}
+      <td> Pustkowia </td>
+    {% elif article.category_id == 2 %}
+    <td> Woda </td>
+    {% elif article.category_id == 3 %}
+    <td> Miasto </td>
+    {% elif article.category_id == 4 %}
+    <td> Góry </td>
+    {% elif article.category_id == 5 %}
+    <td> Las </td>
+    {% endif %}
+      <td> <a href="/article/{{ article.id }}" class="btn btn-primary"> Zobacz </a> </td>
+        {% if current_user.is_authenticated %}
+      <td>  <a href="/updatePost/{{ article.id }}" class="btn btn-secondary"> Aktualizuj </a> </td>
+      <td> <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"> USUŃ </button> </td>
+    {% endif %}
+    </tr>
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Czy usunąć artykuł?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+        <form action="{{ url_for('deletePost', postID=article.id) }}" method="post">
+            <input class="btn btn-danger" type="submit" value="Usuń">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+</div>
+
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,14 @@
+{% extends "base_template.html" %}
+
+
+{% block content %}
+
+
+    {% for article in articles %}
+
+    {{ article.name }}
+    {{ article.description }}
+{% endfor %}
+
+
+{% endblock %}
