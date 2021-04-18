@@ -32,7 +32,7 @@
     </tr>
   </thead>
   <tbody>
-  {% for article in articles %}
+  {% for article in articles.items %}
     <tr>
       <td>{{ loop.index }}</td>
       <td> {{ article.name }}</td>
@@ -80,6 +80,25 @@
 
 
 
+{% endblock %}
+
+
+{% block pagination %}
+  <div class="d-inline-flex paginationbox">
+{% for page_num in articles.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+    {% if articles.page == page_num %}
+        <a class="btn btn-dark m-2" href="{{ url_for('allArticles', page=page_num, categoryID = current_category) }}"> {{ page_num }}</a>
+            {% else %}
+        <a class="btn btn-outline-dark m-2" href="{{ url_for('allArticles', page=page_num, categoryID = current_category) }}"> {{ page_num }}</a>
+        {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+
+
+        {% endfor %}
+</div>
 {% endblock %}
 
 
