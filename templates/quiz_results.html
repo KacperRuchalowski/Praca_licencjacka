@@ -3,15 +3,13 @@
 {% block content %}
 
 
+    <div class="form-check form-check-inline">
 
-
-    <div class="form-check form-check-inline container-fluid">
-
-        <p class="questionControl questionTitle"> Ilość poprawnych odpowiedzi: {{ points }}</p>
+        <p class="questionTitle"> Ilość poprawnych odpowiedzi: {{ points }}</p>
 
 
         {% for p in quiz %}
-          <div class="questionControl">
+          <div class=" questionControlResults">
 
             <p class="questionTitle">{{ p['Question'] }}</p>
 

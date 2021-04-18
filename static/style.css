@@ -74,6 +74,15 @@ body{
     width: 250%;
 }
 
+.questionControlResults {
+    margin: 5%;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 5%;
+    background-color: #edddc8;
+    width: 150%;
+}
+
 .questionTitle {
     font-size: x-large;
 }
