@@ -368,25 +368,21 @@ def single_article(articleID):
 
 @app.route('/category/<categoryID>')
 def single_category(categoryID):
-    articles = Article.query.filter(Article.category_id == categoryID)
-    singleArticle = [
-        {
-            "Title": article.name,
-            "Desc": article.description,
-            "ID": article.id,
-            "Image": article.image,
-            "Image_desc": article.image_desc
-
-        } for article in articles]
+    page = request.args.get('page', 1, type=int)
+    articles = Article.query.filter(Article.category_id == categoryID).paginate(page=page, per_page=3)
 
     categories = Category.query.all()
+
+    current_category = categoryID
+
     results = [
         {
             "Title": category.name,
             "ID": category.id,
         } for category in categories]
 
-    return render_template('single_category.html', article=singleArticle, categories=results,
+    return render_template('single_category.html', article=articles, categories=results,
+                           current_category=current_category,
                            popular=GetMostPopularArticles())
 
 

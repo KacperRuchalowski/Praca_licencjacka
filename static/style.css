@@ -57,7 +57,7 @@ body{
 
 .cardBorder {
     border-style: solid;
-    border-color: #2A4849;
+    border-color: #61471E;
     border-width: 3px;
 }
 
@@ -88,4 +88,10 @@ body{
 
 .badAnswer {
     color: red;
+}
+
+.paginationbox {
+
+    margin-left: 75%;
+
 }
