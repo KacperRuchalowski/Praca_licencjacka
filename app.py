@@ -243,13 +243,18 @@ def updatePost(postID):
     form = PostForm()
     form.category.choices = post_list
 
+    current_image = post.image
+
     if form.validate_on_submit():
         post.name = form.title.data
         post.description = form.content.data
         post.category_id = form.category.data
         post.image_desc = form.image_description.data
-        picture_file = save_picture(form.image.data)
-        post.image = picture_file
+        if form.image.data:
+            picture_file = save_picture(form.image.data)
+            post.image = picture_file
+        else:
+            post.image = current_image
         flash('Zaktualizowano', 'success')
         db.session.commit()
         return redirect(url_for('handle_articles'))
