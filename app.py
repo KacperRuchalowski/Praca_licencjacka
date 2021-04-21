@@ -296,7 +296,7 @@ def deleteQuestion(questionID):
     return redirect(url_for('handle_articles'))
 
 
-@app.route('/articles', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def handle_articles():
     if request.method == 'POST':
         if request.is_json:
