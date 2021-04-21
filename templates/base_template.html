@@ -85,8 +85,12 @@
 {% endwith %}
 
 
+<div class="container-md d-inline-flex ml-4 mt-5">
+    {% block content %} {% endblock %}
+</div>
+
 {% if popular is defined and popular|length %}
-<div class="container float-left w-25 d-inline-flex movePopular ">
+<div class="container w-25 d-inline-block movePopular">
 
       <div class="list-group populartitleBack ">
      <div class="text-center mb-2 p-2 text-white"> Najpopularniejsze artykuły </div>
@@ -99,10 +103,6 @@
 </div>
 </div>
 {% endif %}
-
-<div class="container-md d-inline-flex mt-5">
-    {% block content %} {% endblock %}
-</div>
 
 <div class="container-md d-inline-flex mt-5">
     {% block pagination %} {% endblock %}

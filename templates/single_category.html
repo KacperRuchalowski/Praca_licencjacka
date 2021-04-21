@@ -4,7 +4,7 @@
 
 {% block content %}
 
-
+{% if article is defined and article.items|length %}
 <div class="container bcontent d-inline-flex">
 
 
@@ -50,6 +50,12 @@
 
 </div>
 </div>
+
+
+    {% else %}
+
+    <h2> Przykro nam, ale nie ma tu jeszcze żadnej zawartości </h2>
+    {% endif %}
 
 {% endblock %}
 

@@ -12,10 +12,13 @@
          <div>
     <h2>{{ art['Title'] }} <span class="badge badge-secondary"></span></h2>
 
-         <img src="/static/images/{{ art["Image"] }}" class="resizeImage figure-img img-thumbnail" alt="...">
+
+         <img src="/static/images/{{ art["Image"] }}" class="resizeImage figure-img img-thumbnail" title="{{ art["Image_desc"]}}">
+
+
 
           <div>{{ art['Desc']|safe }}</div>
-         <figcaption class="figure-caption">{{ art["Image_desc"]}}</figcaption>
+
          </div>
 
 

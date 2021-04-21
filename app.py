@@ -86,6 +86,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), unique=True, nullable=False)
 
 
+
+
 def GetAllCategories():
     categories = Category.query.all()
     resultsCategory = [
