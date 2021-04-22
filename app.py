@@ -5,13 +5,17 @@ import secrets
 from PIL import Image
 from flask import Flask, render_template, redirect, url_for, flash
 from flask import request
+from flask_admin.contrib import sqla
 from flask_bcrypt import Bcrypt
 from flask_ckeditor import CKEditor
-from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from forms import PostForm, LoginForm, QuizForm
+
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -86,6 +90,17 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(20), unique=True, nullable=False)
 
 
+class MicroBlogModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login', next=request.url))
+
+
+admin = Admin(app)
+admin.add_view(MicroBlogModelView(User, db.session))
 
 
 def GetAllCategories():
@@ -168,6 +183,14 @@ def quiz():
     return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results, categories=GetAllCategories())
 
 
+@app.route('/editUser')
+def editUser():
+    if current_user.is_authenticated:
+        return redirect('admin/user')
+    else:
+        return redirect(url_for('handle_articles'))
+
+
 @app.route('/search')
 def search():
     q = request.args.get('q')
@@ -206,6 +229,7 @@ def single_category(categoryID):
 
 
 @app.route('/newPost', methods=['POST', 'GET'])
+@login_required
 def newPost():
     available_posts = db.session.query(Category).all()
     post_list = [(i.id, i.name) for i in available_posts]
@@ -226,6 +250,7 @@ def newPost():
 
 
 @app.route('/newQuiz', methods=['POST', 'GET'])
+@login_required
 def newQuiz():
     form = QuizForm()
 
@@ -247,6 +272,7 @@ def newQuiz():
 
 
 @app.route('/updatePost/<int:postID>', methods=['POST', 'GET'])
+@login_required
 def updatePost(postID):
     post = Article.query.get_or_404(postID)
 
@@ -281,6 +307,7 @@ def updatePost(postID):
 
 
 @app.route('/deletePost/<int:postID>', methods=['POST'])
+@login_required
 def deletePost(postID):
     post = Article.query.get_or_404(postID)
     db.session.delete(post)
@@ -290,6 +317,7 @@ def deletePost(postID):
 
 
 @app.route('/deleteQuestion/<int:questionID>', methods=['POST', 'GET'])
+@login_required
 def deleteQuestion(questionID):
     question = Quiz.query.get_or_404(questionID)
     db.session.delete(question)
@@ -336,24 +364,26 @@ def random_article():
     for ids in allArticles:
         idList.append(ids.id)
 
-    randArt = random.choice(idList)
+    if idList:
 
-    articles = Article.query.filter(Article.id == randArt)
+        randArt = random.choice(idList)
 
-    results = [
-        {
-            "Title": article.name,
-            "Desc": article.description,
-            "Image": article.image,
-            "Views": article.views,
-            "Image_desc": article.image_desc
-        } for article in articles]
+        articles = Article.query.filter(Article.id == randArt)
 
-    IncrementViews(randArt)
+        results = [
+            {
+                "Title": article.name,
+                "Desc": article.description,
+                "Image": article.image,
+                "Views": article.views,
+                "Image_desc": article.image_desc
+            } for article in articles]
 
-    return render_template('single_article.html', article=results, popular=GetMostPopularArticles(),
-                           categories=GetAllCategories())
+        IncrementViews(randArt)
 
+        return render_template('single_article.html', article=results, popular=GetMostPopularArticles(),
+                               categories=GetAllCategories())
+    return redirect(url_for('handle_articles'))
 
 @app.route('/categories', methods=['POST', 'GET'])
 def handle_categories():
