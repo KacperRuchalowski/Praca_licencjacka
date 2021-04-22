@@ -21,6 +21,38 @@
                         {{ form.title(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+
+            <div class="form-group">
+                    {{ form.kanji.label(class="form-control-label") }}
+                    {% if form.kanji.errors %}
+                        {{ form.kanji(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.kanji.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.kanji(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+            <div class="form-group">
+                    {{ form.kana.label(class="form-control-label") }}
+                    {% if form.kana.errors %}
+                        {{ form.kana(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.kana.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.kana(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {% if form.content.errors %}

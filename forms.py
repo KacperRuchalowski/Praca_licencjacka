@@ -7,6 +7,8 @@ from flask_ckeditor import CKEditorField
 
 class PostForm(FlaskForm):
     title = StringField('Tytuł', validators=[DataRequired()])
+    kanji = StringField('Zapis kanji', validators=[DataRequired()])
+    kana = StringField('Zapis kana', validators=[DataRequired()])
     content = CKEditorField('Treść', validators=[DataRequired()])
     category = SelectField('Kategoria', coerce=int)
     image_description = StringField('Opis zdjęcia', validators=[DataRequired()])

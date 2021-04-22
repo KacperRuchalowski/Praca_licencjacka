@@ -15,7 +15,6 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import PostForm, LoginForm, QuizForm
 
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -47,15 +46,19 @@ class Article(db.Model):
     description = db.Column(db.String())
     image = db.Column(db.String())
     image_desc = db.Column(db.String())
+    kanji = db.Column(db.String())
+    kana = db.Column(db.String())
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     views = db.Column(db.Integer)
 
-    def __init__(self, name, description, image, image_desc):
+    def __init__(self, name, description, image, image_desc, kanji, kana):
         self.name = name
         self.description = description
         self.image = image
         self.views = 0
         self.image_desc = image_desc
+        self.kanji = kanji
+        self.kana = kana
 
     def __repr__(self):
         return f"<article {self.name}>"
@@ -239,7 +242,7 @@ def newPost():
     if form.validate_on_submit():
         picture_file = save_picture(form.image.data)
         article = Article(name=form.title.data, description=form.content.data, image=picture_file,
-                          image_desc=form.image_description.data)
+                          image_desc=form.image_description.data, kanji=form.kanji.data, kana=form.kana.data)
         article.category_id = form.category.data
         db.session.add(article)
         db.session.commit()
@@ -289,6 +292,8 @@ def updatePost(postID):
         post.name = form.title.data
         post.description = form.content.data
         post.category_id = form.category.data
+        post.kana = form.kana.data
+        post.kanji = form.kanji.data
         post.image_desc = form.image_description.data
         if form.image.data:
             picture_file = save_picture(form.image.data)
@@ -302,6 +307,9 @@ def updatePost(postID):
     elif request.method == 'GET':
         form.title.data = post.name
         form.content.data = post.description
+        form.kanji.data = post.kanji
+        form.kana.data = post.kana
+        form.image_description.data = post.image_desc
 
     return render_template('newPost.html', title='Aktualizuj artykuł', form=form, legend='Aktualizuj artykuł')
 
@@ -328,31 +336,8 @@ def deleteQuestion(questionID):
 
 @app.route('/', methods=['POST', 'GET'])
 def handle_articles():
-    if request.method == 'POST':
-        if request.is_json:
-            data = request.get_json()
-            new_article = Article(name=data['name'], description=data['description'], image=data['image'],
-                                  image_desc=data['image'])
-            db.session.add(new_article)
-            db.session.commit()
-            return {"message": f"car {new_article.name} has been created successfully."}
-        else:
-            return {"error": "The request payload is not in JSON format"}
-
-    elif request.method == 'GET':
-        articles = Article.query.all()
-        results = [
-            {
-                "Title": article.name,
-                "Desc": article.description,
-                "ID": article.id,
-                "image": article.image,
-                "Image_desc": article.image_desc
-
-            } for article in articles]
-
-        return render_template('articles.html', articles=results, categories=GetAllCategories(),
-                               popular=GetMostPopularArticles(), title="Strona główna")
+    return render_template('articles.html', categories=GetAllCategories(),
+                           popular=GetMostPopularArticles(), title="Strona główna")
 
 
 @app.route('/randomArticle')
@@ -365,7 +350,6 @@ def random_article():
         idList.append(ids.id)
 
     if idList:
-
         randArt = random.choice(idList)
 
         articles = Article.query.filter(Article.id == randArt)
@@ -384,6 +368,7 @@ def random_article():
         return render_template('single_article.html', article=results, popular=GetMostPopularArticles(),
                                categories=GetAllCategories())
     return redirect(url_for('handle_articles'))
+
 
 @app.route('/categories', methods=['POST', 'GET'])
 def handle_categories():
@@ -412,7 +397,10 @@ def single_article(articleID):
             "Desc": article.description,
             "Image": article.image,
             "Views": article.views,
-            "Image_desc": article.image_desc
+            "Image_desc": article.image_desc,
+            "Kanji": article.kanji,
+            "Kana": article.kana
+
         } for article in articles]
 
     IncrementViews(articleID)
