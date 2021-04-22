@@ -249,7 +249,8 @@ def newPost():
         flash('Dodano nowy artykuł!', 'success')
         return redirect(url_for('handle_articles'))
 
-    return render_template('newPost.html', title='Nowy artykuł', form=form, legend='Nowy artykuł')
+    return render_template('newPost.html', title='Nowy artykuł', form=form, legend='Nowy artykuł',
+                           categories=GetAllCategories())
 
 
 @app.route('/newQuiz', methods=['POST', 'GET'])
@@ -271,7 +272,8 @@ def newQuiz():
         flash('Dodano nowe pytanie!', 'success')
         return redirect(url_for('handle_articles'))
 
-    return render_template('newQuiz.html', title='Nowy artykuł', form=form, legend='Nowy artykuł')
+    return render_template('newQuiz.html', title='Nowy artykuł', form=form, legend='Nowy artykuł',
+                           categories=GetAllCategories())
 
 
 @app.route('/updatePost/<int:postID>', methods=['POST', 'GET'])
@@ -280,7 +282,6 @@ def updatePost(postID):
     post = Article.query.get_or_404(postID)
 
     available_posts = db.session.query(Category).all()
-    # Now forming the list of tuples for SelectField
     post_list = [(i.id, i.name) for i in available_posts]
 
     form = PostForm()
@@ -311,7 +312,8 @@ def updatePost(postID):
         form.kana.data = post.kana
         form.image_description.data = post.image_desc
 
-    return render_template('newPost.html', title='Aktualizuj artykuł', form=form, legend='Aktualizuj artykuł')
+    return render_template('newPost.html', title='Aktualizuj artykuł', form=form, legend='Aktualizuj artykuł',
+                           categories=GetAllCategories())
 
 
 @app.route('/deletePost/<int:postID>', methods=['POST'])
@@ -360,7 +362,9 @@ def random_article():
                 "Desc": article.description,
                 "Image": article.image,
                 "Views": article.views,
-                "Image_desc": article.image_desc
+                "Image_desc": article.image_desc,
+                "Kanji": article.kanji,
+                "Kana": article.kana
             } for article in articles]
 
         IncrementViews(randArt)

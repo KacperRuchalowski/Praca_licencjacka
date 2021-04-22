@@ -105,3 +105,15 @@ body{
 
 }
 
+.intro_paint {
+    color: #61471E;
+    font-weight: bold;
+}
+
+.intro_paint:hover { color: white; }
+
+
+.buttonSee {
+    background-color: #61471E;
+    color: white;
+}
