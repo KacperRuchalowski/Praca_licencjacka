@@ -26,10 +26,15 @@
               </label>
               <br>
             {% endfor %}
+          POMOC: <a href="linkQuiz/{{ p["Link"] }}"> {{ p["Link"] }} </a>
           </div>
             {% if current_user.is_authenticated %}
          <a href="/deleteQuestion/{{ p["ID"] }}" class="btn btn-warning"> Usuń </a>
             {% endif %}
+
+
+
+
         {% endfor %}
 
         {% if quiz is defined and quiz|length %}

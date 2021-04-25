@@ -73,6 +73,7 @@ class Quiz(db.Model):
     answer2 = db.Column(db.String())
     answer3 = db.Column(db.String())
     good_answer = db.Column(db.String())
+    help_link = db.Column(db.String())
 
     def __init__(self, question, answer1, answer2, answer3):
         self.question = question
@@ -163,7 +164,8 @@ def quiz():
             "Question": question.question,
             "Answers": [question.answer1, question.answer2, question.answer3],
             "GoodAnswer": question.good_answer,
-            "ID": question.id
+            "ID": question.id,
+            "Link": question.help_link
 
         } for question in allQuestions]
 
@@ -192,6 +194,13 @@ def editUser():
         return redirect('admin/user')
     else:
         return redirect(url_for('handle_articles'))
+
+
+@app.route('/linkQuiz/<articleName>')
+def LinkQuiz(articleName):
+    article = Article.query.filter(Article.name == articleName).first()
+    Article_id = article.id
+    return redirect(url_for('single_article', articleID=Article_id))
 
 
 @app.route('/search')
@@ -266,6 +275,7 @@ def newQuiz():
             question.good_answer = form.answer2.data
         elif form.good_answer.data == 'Odpowiedź 3':
             question.good_answer = form.answer3.data
+        question.help_link = form.help_link.data
         db.session.add(question)
         db.session.commit()
         flash('Dodano nowe pytanie!', 'success')
