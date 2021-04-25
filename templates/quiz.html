@@ -26,7 +26,7 @@
               </label>
               <br>
             {% endfor %}
-          POMOC: <a href="linkQuiz/{{ p["Link"] }}"> {{ p["Link"] }} </a>
+          <a href="linkQuiz/{{ p["Link"] }}"> POMOC </a>
           </div>
             {% if current_user.is_authenticated %}
          <a href="/deleteQuestion/{{ p["ID"] }}" class="btn btn-warning"> Usuń </a>

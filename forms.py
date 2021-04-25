@@ -22,7 +22,7 @@ class QuizForm(FlaskForm):
     answer2 = StringField('Odpowiedź 2', validators=[DataRequired()])
     answer3 = StringField('Odpowiedź 3', validators=[DataRequired()])
     good_answer = SelectField('Prawidłowa odpowiedź', choices=['Odpowiedź 1', 'Odpowiedź 2', 'Odpowiedź 3'])
-    help_link = StringField('Nazwa artykułu pomocniczego')
+    help_link = SelectField('Nazwa artykułu pomocniczego', coerce=str)
     submit = SubmitField('Akceptuj')
 
 

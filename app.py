@@ -196,10 +196,8 @@ def editUser():
         return redirect(url_for('handle_articles'))
 
 
-@app.route('/linkQuiz/<articleName>')
-def LinkQuiz(articleName):
-    article = Article.query.filter(Article.name == articleName).first()
-    Article_id = article.id
+@app.route('/linkQuiz/<Article_id>')
+def LinkQuiz(Article_id):
     return redirect(url_for('single_article', articleID=Article_id))
 
 
@@ -264,7 +262,11 @@ def newPost():
 @app.route('/newQuiz', methods=['POST', 'GET'])
 @login_required
 def newQuiz():
+    available_posts = db.session.query(Article).all()
+    post_list = [(i.id, i.name) for i in available_posts]
+
     form = QuizForm()
+    form.help_link.choices = post_list
 
     if form.validate_on_submit():
         question = Quiz(question=form.question.data, answer1=form.answer1.data, answer2=form.answer2.data,
