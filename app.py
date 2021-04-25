@@ -225,7 +225,6 @@ def single_category(categoryID):
     page = request.args.get('page', 1, type=int)
     articles = Article.query.filter(Article.category_id == categoryID).paginate(page=page, per_page=2)
     current_category = categoryID
-
     return render_template('single_category.html', article=articles, categories=GetAllCategories(),
                            current_category=current_category,
                            popular=GetMostPopularArticles())

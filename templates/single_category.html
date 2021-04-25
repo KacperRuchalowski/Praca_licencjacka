@@ -1,9 +1,11 @@
 {% extends "base_template.html" %}
 
 
+{% block thumbnail %}
+ <h1 class="pageTitle"> Kategorie </h1>
+{% endblock %}
 
 {% block content %}
-
 {% if article is defined and article.items|length %}
 <div class="container bcontent d-inline-flex">
 
