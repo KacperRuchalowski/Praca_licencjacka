@@ -21,8 +21,8 @@
 }
 
 .resizeImageCard {
-     width: 100px;
-    height: 300px;
+     width: 300px;
+    height: 400px;
 }
 
 body{
@@ -121,4 +121,13 @@ body{
 .pageTitle {
     margin-left: 5%;
     margin-top: 1%;
+}
+
+.fontFront {
+    font-family: "Helvetica Neue", sans-serif;
+
+}
+
+.footerControl {
+    background-color: #edddc8;
 }

@@ -2,6 +2,7 @@ import os
 import random
 import secrets
 
+import editor
 from PIL import Image
 from flask import Flask, render_template, redirect, url_for, flash
 from flask import request
@@ -118,6 +119,7 @@ def GetAllCategories():
     return resultsCategory
 
 
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -222,7 +224,7 @@ def allArticles():
         articles = Article.query.filter(Article.name.contains(q) |
                                         Article.description.contains(q)).paginate(page=page, per_page=10)
     else:
-        articles = Article.query.paginate(page=page, per_page=10)
+        articles = Article.query.paginate(page=page, per_page=3)
     return render_template('all_articles.html', articles=articles, popular=GetMostPopularArticles(),
                            categories=GetAllCategories())
 
@@ -230,7 +232,7 @@ def allArticles():
 @app.route('/category/<categoryID>')
 def single_category(categoryID):
     page = request.args.get('page', 1, type=int)
-    articles = Article.query.filter(Article.category_id == categoryID).paginate(page=page, per_page=2)
+    articles = Article.query.filter(Article.category_id == categoryID).paginate(page=page, per_page=3)
     current_category = categoryID
     return render_template('single_category.html', article=articles, categories=GetAllCategories(),
                            current_category=current_category,
