@@ -224,7 +224,7 @@ def allArticles():
         articles = Article.query.filter(Article.name.contains(q) |
                                         Article.description.contains(q)).paginate(page=page, per_page=10)
     else:
-        articles = Article.query.paginate(page=page, per_page=3)
+        articles = Article.query.paginate(page=page, per_page=10)
     return render_template('all_articles.html', articles=articles, popular=GetMostPopularArticles(),
                            categories=GetAllCategories())
 
