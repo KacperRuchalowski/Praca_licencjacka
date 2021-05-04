@@ -2,7 +2,6 @@ import os
 import random
 import secrets
 
-import editor
 from PIL import Image
 from flask import Flask, render_template, redirect, url_for, flash
 from flask import request
@@ -119,7 +118,6 @@ def GetAllCategories():
     return resultsCategory
 
 
-
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -196,6 +194,11 @@ def editUser():
         return redirect('admin/user')
     else:
         return redirect(url_for('handle_articles'))
+
+
+@app.route('/sources')
+def sources():
+    return render_template('sources.html', categories=GetAllCategories(), popular=GetMostPopularArticles())
 
 
 @app.route('/linkQuiz/<Article_id>')
