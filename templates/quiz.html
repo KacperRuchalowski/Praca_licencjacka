@@ -4,10 +4,22 @@
 
 <h1 class="pageTitle"> Quiz </h1>
 
+    <div class="d-inline-flex m-5 p-3 border border-dark rounded articleBackground">
+    Witaj w naszym quizie. Wprowadź odpowiedzi na formularzu, a następnie kliknij "Sprawdź odpowiedzi". Dowiesz się wtedy jak dobrze Ci poszło. <br>
+    Pamiętaj, że zawsze możesz wrócić do artykułu, którego dotyczy pytanie. Wystarczy, że klikniesz przycisk "POMOC". <br>
+    POWODZENIA!
+
+</div>
 {% endblock %}
 
+
 {% block content %}
+
+
+
     <div class="form-check form-check-inline">
+
+
     <form method="POST">
 
         {% for p in quiz %}

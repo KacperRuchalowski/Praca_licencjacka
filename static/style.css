@@ -131,3 +131,7 @@ body{
 .footerControl {
     background-color: #edddc8;
 }
+
+.custom-toggler.navbar-toggler {
+    border-color: lightgreen;
+}

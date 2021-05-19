@@ -158,6 +158,7 @@ def knowledge():
 @app.route('/quiz', methods=['POST', 'GET'])
 def quiz():
     allQuestions = Quiz.query.all()
+    maxAmount = Quiz.query.count()
 
     results = [
         {
@@ -183,7 +184,8 @@ def quiz():
                 bad_answers.append(odp)
 
         return render_template('quiz_results.html', popular=GetMostPopularArticles(), quiz=results, points=points
-                               , answer=good_answers, bad_answers=bad_answers, categories=GetAllCategories())
+                               , answer=good_answers, bad_answers=bad_answers, categories=GetAllCategories(),
+                               maxPoints=maxAmount)
 
     return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results, categories=GetAllCategories())
 

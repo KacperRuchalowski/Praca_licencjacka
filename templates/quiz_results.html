@@ -11,8 +11,11 @@
 
 
     <div class="form-check form-check-inline">
-
-        <p class="questionTitle"> Ilość poprawnych odpowiedzi: {{ points }}</p>
+    <p class="questionTitle"> Ilość poprawnych odpowiedzi: {{ points }} / {{ maxPoints }}.<br>
+        {% if points == maxPoints %}
+        <p class="questionTitle">
+            Gratulacje! Udało Ci się odpowiedzieć poprawnie na wszystkie pytania!</p> <br>
+        {% endif %}
 
 
         {% for p in quiz %}
