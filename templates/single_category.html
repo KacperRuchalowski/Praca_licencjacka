@@ -7,7 +7,7 @@
 
 {% block content %}
 {% if article is defined and article.items|length %}
-<div class="container bcontent d-inline-flex">
+<div class="container bcontent d-inline-flex categoryMove">
 
 
         <hr />
@@ -15,7 +15,7 @@
         {% for art in article.items %}
 
     <div class="card cardBorder">
-           <img src="/static/images/{{ art.image }}" class=" resizeImageCard" alt="...">
+           <img src="/static/images/{{ art.image }}" class="resizeImageCard img-fluid" alt="...">
             <div class="card-body articleBackground">
                  <h5 class="card-title">{{ art.name }}</h5>
             </div>

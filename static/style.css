@@ -66,7 +66,8 @@ body{
 }
 
 .questionControl {
-    margin: 5%;
+    margin-left: 50%;
+    margin-bottom: 10%;
     border-style: solid;
     border-radius: 10px;
     padding: 10%;
@@ -80,7 +81,7 @@ body{
     border-radius: 10px;
     padding: 5%;
     background-color: #edddc8;
-    width: 150%;
+    width: 100%;
 }
 
 .questionTitle {
@@ -134,4 +135,27 @@ body{
 
 .custom-toggler.navbar-toggler {
     border-color: lightgreen;
+}
+
+.categoryMove {
+    margin-left: 15%;
+}
+
+.quizMove {
+    margin-left: 45%;
+    margin-bottom: 10%;
+}
+
+.questionControlResults {
+    margin: 5%;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 5%;
+    background-color: #edddc8;
+    width: 100%;
+}
+
+.removeButton {
+    background-color: #61471E;
+    color: white;
 }

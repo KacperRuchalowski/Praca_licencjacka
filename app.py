@@ -130,6 +130,11 @@ def save_picture(form_picture):
     return picture_fn
 
 
+def makePercent(points, maxPoints):
+    percent = (points / maxPoints) * 100
+    return percent
+
+
 def IncrementViews(art_ID):
     article = Article.query.filter(Article.id == art_ID).first()
     article.views += 1
@@ -183,9 +188,11 @@ def quiz():
             else:
                 bad_answers.append(odp)
 
+        result = makePercent(points, maxAmount)
+
         return render_template('quiz_results.html', popular=GetMostPopularArticles(), quiz=results, points=points
                                , answer=good_answers, bad_answers=bad_answers, categories=GetAllCategories(),
-                               maxPoints=maxAmount)
+                               maxPoints=maxAmount, result=result)
 
     return render_template('quiz.html', popular=GetMostPopularArticles(), quiz=results, categories=GetAllCategories())
 
@@ -201,6 +208,11 @@ def editUser():
 @app.route('/sources')
 def sources():
     return render_template('sources.html', categories=GetAllCategories(), popular=GetMostPopularArticles())
+
+
+@app.route('/aboutUs')
+def aboutUs():
+    return render_template('aboutUs.html')
 
 
 @app.route('/linkQuiz/<Article_id>')

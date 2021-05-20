@@ -10,16 +10,22 @@
 {% block content %}
 
 
-    <div class="form-check form-check-inline">
-    <p class="questionTitle"> Ilość poprawnych odpowiedzi: {{ points }} / {{ maxPoints }}.<br>
-        {% if points == maxPoints %}
-        <p class="questionTitle">
-            Gratulacje! Udało Ci się odpowiedzieć poprawnie na wszystkie pytania!</p> <br>
+    <div>
+
+    <p class="questionTitle"> Twój wynik to {{ result }}%.<br>
+        {% if result == 100 %}
+        <p class="questionTitle"> Gratulacje! Udało Ci się odpowiedzieć poprawnie na wszystkie pytania!</p> <br>
+        {% elif result in range(50,99) %}
+        <p class="questionTitle"> Bardzo dobrze! Niestety jeszcze trochę brakuje do perfekcyjnego wyniku. Jesteś już blisko! </p> <br>
+        {% elif result in range(1, 49) %}
+        <p class="questionTitle"> Nieźle, ale czeka Cię jeszcze dużo nauki na temat demonologii Japonii. </p> <br>
+        {% elif result == 0 %}
+        <p class="questionTitle"> Nie odpowiedziałeś/aś poprawnie na żadne postawione pytanie. Przeczytaj kilka artykułów i spróbuj ponownie!</p> <br>
         {% endif %}
 
 
         {% for p in quiz %}
-          <div class=" questionControlResults">
+          <div class="questionControlResults">
 
             <p class="questionTitle">{{ p['Question'] }}</p>
 
