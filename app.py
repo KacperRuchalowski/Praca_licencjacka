@@ -6,15 +6,14 @@ from PIL import Image
 from flask import Flask, render_template, redirect, url_for, flash
 from flask import request
 from flask_admin.contrib import sqla
-from flask_bcrypt import Bcrypt
+from flask_admin import Admin
 from flask_ckeditor import CKEditor
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from forms import PostForm, LoginForm, QuizForm
-
-from flask_admin import Admin
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
