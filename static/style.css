@@ -72,7 +72,7 @@ body{
     border-radius: 10px;
     padding: 10%;
     background-color: #edddc8;
-    width: 250%;
+    width: 100%;
 }
 
 .questionControlResults {
@@ -152,7 +152,7 @@ body{
     border-radius: 10px;
     padding: 5%;
     background-color: #edddc8;
-    width: 100%;
+    width: 50%;
 }
 
 .removeButton {

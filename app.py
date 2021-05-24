@@ -131,6 +131,7 @@ def save_picture(form_picture):
 
 def makePercent(points, maxPoints):
     percent = (points / maxPoints) * 100
+    percent = int(percent)
     return percent
 
 
