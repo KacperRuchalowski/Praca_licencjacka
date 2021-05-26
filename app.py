@@ -12,7 +12,6 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-
 from forms import PostForm, LoginForm, QuizForm
 
 app = Flask(__name__)
@@ -45,13 +44,13 @@ class Article(db.Model):
     description = db.Column(db.String())
     image = db.Column(db.String())
     image_desc = db.Column(db.String())
+    image_safeDesc = db.Column(db.String())
     kanji = db.Column(db.String())
     kana = db.Column(db.String())
-
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     views = db.Column(db.Integer)
 
-    def __init__(self, name, description, image, image_desc, kanji, kana):
+    def __init__(self, name, description, image, image_desc, kanji, kana, image_safeDesc):
         self.name = name
         self.description = description
         self.image = image
@@ -59,6 +58,7 @@ class Article(db.Model):
         self.image_desc = image_desc
         self.kanji = kanji
         self.kana = kana
+        self.image_safeDesc = image_safeDesc
 
     def __repr__(self):
         return f"<article {self.name}>"
@@ -268,7 +268,8 @@ def newPost():
     if form.validate_on_submit():
         picture_file = save_picture(form.image.data)
         article = Article(name=form.title.data, description=form.content.data, image=picture_file,
-                          image_desc=form.image_description.data, kanji=form.kanji.data, kana=form.kana.data)
+                          image_desc=form.image_description.data, kanji=form.kanji.data, kana=form.kana.data,
+                          image_safeDesc=form.image_safe.data)
         article.category_id = form.category.data
         db.session.add(article)
         db.session.commit()
@@ -327,6 +328,7 @@ def updatePost(postID):
         post.kana = form.kana.data
         post.kanji = form.kanji.data
         post.image_desc = form.image_description.data
+        post.image_safeDesc = form.image_safe.data
         if form.image.data:
             picture_file = save_picture(form.image.data)
             post.image = picture_file
@@ -395,7 +397,8 @@ def random_article():
                 "Views": article.views,
                 "Image_desc": article.image_desc,
                 "Kanji": article.kanji,
-                "Kana": article.kana
+                "Kana": article.kana,
+                "Safe": article.image_safeDesc
             } for article in articles]
 
         IncrementViews(randArt)

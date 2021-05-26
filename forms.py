@@ -12,6 +12,7 @@ class PostForm(FlaskForm):
     content = CKEditorField('Treść', validators=[DataRequired()])
     category = SelectField('Kategoria', coerce=int)
     image_description = StringField('Opis zdjęcia', validators=[DataRequired()])
+    image_safe = StringField('Bezpieczny opis', validators=[DataRequired()])
     image = FileField('Zdjęcie', validators=[FileAllowed(['jpg', 'png'], FileRequired())])
     submit = SubmitField('Akceptuj')
 
