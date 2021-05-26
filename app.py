@@ -47,6 +47,7 @@ class Article(db.Model):
     image_desc = db.Column(db.String())
     kanji = db.Column(db.String())
     kana = db.Column(db.String())
+
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     views = db.Column(db.Integer)
 
