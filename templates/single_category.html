@@ -15,14 +15,14 @@
         {% for art in article.items %}
 
     <div class="card cardBorder">
-           <img src="/static/images/{{ art.image }}" class="resizeImageCard img-fluid" alt="...">
+           <img src="{{url_for('static', filename='images/')}}{{ art.image }}" class="resizeImageCard img-fluid" alt="...">
             <div class="card-body articleBackground">
                  <h5 class="card-title">{{ art.name }}</h5>
             </div>
             <div class="card-footer populartitleBack">
-                <a href="/article/{{ art.id }}" class="btn btn-primary"> Zobacz </a>
+                <a href="{{ url_for('single_article', articleID=art.id) }}" class="btn btn-primary"> Zobacz </a>
         {% if current_user.is_authenticated %}
-    <a href="/updatePost/{{ art.id }}" class="btn btn-secondary"> Aktualizuj </a>
+    <a href="{{ url_for('updatePost', postID=art.id) }}" class="btn btn-secondary"> Aktualizuj </a>
     <td> <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"> USUŃ </button> </td>
      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

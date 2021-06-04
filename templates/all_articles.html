@@ -48,9 +48,9 @@
     {% elif article.category_id == 5 %}
     <td> Las </td>
     {% endif %}
-      <td> <a href="/article/{{ article.id }}" class="btn buttonSee"> Zobacz </a> </td>
+      <td> <a href="{{ url_for('single_article', articleID=article.id) }}" class="btn buttonSee"> Zobacz </a> </td>
         {% if current_user.is_authenticated %}
-      <td>  <a href="/updatePost/{{ article.id }}" class="btn btn-secondary"> Aktualizuj </a> </td>
+      <td>  <a href="{{ url_for('updatePost', postID=article.id) }}" class="btn btn-secondary"> Aktualizuj </a> </td>
       <td> <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal"> USUŃ </button> </td>
     {% endif %}
     </tr>
