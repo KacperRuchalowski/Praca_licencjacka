@@ -18,9 +18,8 @@
 
 <div class="d-inline-flex mx-5 p-5 border border-dark rounded d-none d-lg-block">
 
-
          <div>
-            <img  src="/static/map/map.png" alt="map" usemap="#image-map">
+            <img  src="{{url_for('static', filename='map/map.png')}}" alt="map" usemap="#image-map">
              <map name="image-map">
     <area target="" alt="fields" title="Pustkowia" href="/category/1" coords="486,170,676,223" shape="rect">
     <area target="" alt="mountains" title="Góry" href="/category/4" coords="223,80,412,128" shape="rect">
